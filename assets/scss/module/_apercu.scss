@@ -1,0 +1,43 @@
+// Module : apercu (œuvre AniList sélectionnée)
+
+@use "../abstracts/mixins" as *;
+
+.apercu {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 14px;
+    align-items: start;
+    padding: 12px;
+    border: 1px solid var(--couleur-bordure);
+    border-left: 4px solid var(--couleur-accent);
+    border-radius: var(--rayon-petit);
+    background: var(--couleur-papier);
+
+    &__image {
+        width: 80px;
+        aspect-ratio: 2 / 3;
+        border: 1px solid var(--couleur-bordure);
+        object-fit: cover;
+    }
+
+    &__infos {
+        display: grid;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    &__titre {
+        font-family: var(--police-titre);
+        font-weight: 800;
+    }
+
+    &__meta {
+        font-size: 0.8rem;
+        color: var(--couleur-texte-doux);
+    }
+
+    &__resume {
+        @include line-clamp(4);
+        font-size: 0.85rem;
+    }
+}

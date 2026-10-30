@@ -1,0 +1,90 @@
+// Base — reset et éléments HTML nus
+
+@use "../abstracts/mixins" as *;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    @include washi;
+    margin: 0;
+    font-family: var(--police);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--couleur-texte);
+    background-color: var(--couleur-fond);
+}
+
+::selection {
+    color: var(--couleur-surface);
+    background: var(--couleur-accent);
+}
+
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--police-titre);
+    line-height: 1.2;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul,
+dl,
+dd {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+legend {
+    padding: 0;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+:focus-visible {
+    outline: 2px solid var(--couleur-accent);
+    outline-offset: 2px;
+}

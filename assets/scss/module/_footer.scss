@@ -1,0 +1,30 @@
+// Module : footer (vagues seigaiha au-dessus de la laque)
+
+@use "../abstracts/mixins" as *;
+
+.footer {
+    position: relative;
+    padding-block: 64px 24px;
+    color: var(--couleur-encre-texte);
+    background: var(--couleur-encre);
+
+    &::before {
+        @include seigaiha(var(--couleur-manhwa), var(--couleur-surface), 48px);
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 36px;
+        border-bottom: 3px solid var(--couleur-or);
+        opacity: 0.9;
+    }
+
+    &__texte {
+        font-size: 0.875rem;
+        text-align: center;
+        opacity: 0.8;
+    }
+
+    &__lien {
+        color: var(--couleur-or);
+    }
+}

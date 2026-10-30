@@ -1,0 +1,49 @@
+@use "../abstracts/mixins" as *;
+
+// State — états temporaires, ajoutés/retirés en PHP ou JS
+
+.is-hidden {
+    display: none !important;
+}
+
+.is-active.nav__lien {
+    color: var(--couleur-encre-texte);
+    box-shadow: inset 0 -2px 0 var(--couleur-accent);
+}
+
+.is-active.nav__lien--cta {
+    color: var(--couleur-surface);
+    background: var(--couleur-accent-fonce);
+    box-shadow: inset 0 0 0 1px var(--couleur-or);
+}
+
+.is-error {
+    color: var(--couleur-danger) !important;
+}
+
+// Filtres repliés (mobile uniquement, état posé par filtres.js)
+@include sous(bureau) {
+    .filtres.is-ferme {
+        gap: 0;
+
+        .filtres__contenu {
+            display: none;
+        }
+
+        .filtres__chevron {
+            transform: rotate(-45deg) translateX(-3px);
+        }
+    }
+}
+
+// Recherche en cours : spinner visible
+.is-loading .recherche__chargement {
+    opacity: 1;
+    animation: rotation 0.7s linear infinite;
+}
+
+@keyframes rotation {
+    to {
+        transform: rotate(360deg);
+    }
+}

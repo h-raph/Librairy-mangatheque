@@ -1,0 +1,75 @@
+// Module : formulaire
+
+@use "../abstracts/mixins" as *;
+
+.formulaire {
+    @include cadre;
+    display: grid;
+    gap: 18px;
+    padding: 26px;
+
+    &__ligne {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+
+        @include sous(mobile) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__groupe {
+        display: grid;
+        gap: 6px;
+    }
+
+    &__label {
+        font-family: var(--police-titre);
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    &__champ {
+        @include champ;
+        padding: 10px 12px;
+
+        &--texte {
+            resize: vertical;
+        }
+    }
+
+    &__aide {
+        font-size: 0.8rem;
+        color: var(--couleur-texte-doux);
+    }
+
+    // Bloc repliable de saisie manuelle
+    &__manuel {
+        padding: 14px;
+        border: 1px dashed var(--couleur-bordure);
+        border-radius: var(--rayon-petit);
+
+        &[open] {
+            padding-bottom: 18px;
+        }
+
+        .formulaire__groupe + .formulaire__groupe {
+            margin-top: 14px;
+        }
+    }
+
+    &__manuel-titre {
+        font-size: 0.875rem;
+        color: var(--couleur-texte-doux);
+        cursor: pointer;
+
+        .formulaire__manuel[open] & {
+            margin-bottom: 14px;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: 10px;
+    }
+}

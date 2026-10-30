@@ -1,0 +1,43 @@
+// Module : entete-page (kanji vertical au pinceau + titre)
+
+@use "../abstracts/mixins" as *;
+
+.entete-page {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+
+    &__kanji {
+        @include kanji(2.1rem);
+        writing-mode: vertical-rl;
+        padding: 4px 0 4px 12px;
+        border-left: 3px solid var(--couleur-accent);
+        letter-spacing: 0.1em;
+    }
+
+    &__textes {
+        display: grid;
+        gap: 6px;
+
+        // Trait de pinceau sous le titre
+        &::after {
+            content: "";
+            width: 140px;
+            height: 3px;
+            margin-top: 6px;
+            background: linear-gradient(90deg, var(--couleur-accent), var(--couleur-accent) 40%, transparent);
+            border-radius: 2px;
+        }
+    }
+
+    &__titre {
+        font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+        font-weight: 800;
+        letter-spacing: 0.01em;
+    }
+
+    &__compteur {
+        color: var(--couleur-texte-doux);
+    }
+}

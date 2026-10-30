@@ -1,0 +1,103 @@
+// Module : recherche (autocomplétion AniList)
+
+@use "../abstracts/mixins" as *;
+
+.recherche {
+    display: grid;
+    gap: 10px;
+
+    &__label {
+        font-family: var(--police-titre);
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    &__barre {
+        position: relative;
+    }
+
+    &__champ {
+        @include champ;
+        padding: 14px 44px 14px 16px;
+        border-width: 1px 1px 3px;
+        border-bottom-color: var(--couleur-texte);
+        font-size: 1.05rem;
+    }
+
+    &__chargement {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        width: 18px;
+        height: 18px;
+        margin-top: -9px;
+        border: 2px solid var(--couleur-bordure);
+        border-top-color: var(--couleur-accent);
+        border-radius: 50%;
+        opacity: 0;
+    }
+
+    &__message {
+        font-size: 0.9rem;
+        color: var(--couleur-texte-doux);
+    }
+
+    &__resultats {
+        display: grid;
+        gap: 8px;
+    }
+
+    &__bouton {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        width: 100%;
+        padding: 8px;
+        border: 1px solid var(--couleur-bordure);
+        border-radius: var(--rayon-petit);
+        background: var(--couleur-surface);
+        text-align: left;
+        cursor: pointer;
+        transition: border-color var(--transition), background var(--transition);
+
+        &:hover {
+            border-color: var(--couleur-accent);
+            background: var(--couleur-papier);
+            box-shadow: inset 3px 0 0 var(--couleur-accent);
+        }
+    }
+
+    &__image {
+        flex-shrink: 0;
+        width: 48px;
+        height: 72px;
+        border: 1px solid var(--couleur-bordure);
+        object-fit: cover;
+        background: var(--couleur-surface-2);
+    }
+
+    &__infos {
+        display: grid;
+        gap: 2px;
+    }
+
+    &__titre {
+        font-family: var(--police-titre);
+        font-weight: 700;
+    }
+
+    &__meta {
+        font-size: 0.8rem;
+        color: var(--couleur-texte-doux);
+    }
+
+    &__deja {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--couleur-succes);
+    }
+
+    &__item--deja &__bouton {
+        opacity: 0.7;
+    }
+}

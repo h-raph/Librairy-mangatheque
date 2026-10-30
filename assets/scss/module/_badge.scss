@@ -1,0 +1,61 @@
+// Module : badge — types en sceaux hanko, statuts en étiquettes à losange
+
+// Couleur du losange par statut de lecture (modificateurs BEM)
+$statuts: (
+    "en-cours": var(--couleur-info),
+    "a-lire": var(--couleur-texte-doux),
+    "termine": var(--couleur-succes),
+    "en-pause": var(--couleur-alerte),
+    "abandonne": var(--couleur-danger),
+);
+
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: var(--rayon-petit);
+    font-family: var(--police-titre);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--couleur-surface);
+    background: var(--couleur-surface-2);
+
+    // Types : sceau plein avec liseré intérieur
+    @each $type in (manga, manhwa, manhua) {
+        &--#{$type} {
+            background: var(--couleur-#{$type});
+            box-shadow: inset 0 0 0 2px rgb(248 242 228 / 0.3);
+        }
+    }
+
+    &--neutre {
+        color: var(--couleur-texte);
+        border: 1px solid var(--couleur-bordure);
+    }
+
+    // Statuts : étiquette papier avec losange coloré
+    &--statut {
+        position: relative;
+        padding-left: 22px;
+        color: var(--couleur-texte);
+        background: var(--couleur-papier);
+        border: 1px solid var(--couleur-bordure);
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 9px;
+            top: 50%;
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            transform: translateY(-50%) rotate(45deg);
+        }
+    }
+
+    @each $statut, $couleur in $statuts {
+        &--#{$statut}::before {
+            background: $couleur;
+        }
+    }
+}

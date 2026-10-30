@@ -1,0 +1,70 @@
+// Layout — grandes zones de la page
+
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.l-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.l-container {
+    width: min(#{$largeur-max}, 100% - 2 * var(--espace));
+    margin-inline: auto;
+}
+
+.l-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.l-main {
+    flex: 1;
+    padding-block: 32px 48px;
+}
+
+// Bibliothèque : filtres à gauche, grille à droite
+.l-bibliotheque {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 32px;
+    align-items: start;
+
+    &__filtres {
+        position: sticky;
+        top: $hauteur-header + 24px;
+    }
+
+    @include sous(bureau) {
+        grid-template-columns: 1fr;
+
+        &__filtres {
+            position: static;
+        }
+    }
+}
+
+.l-grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 32px 22px; // espace vertical pour les baguettes des rouleaux
+
+    @include sous(bureau) {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 26px 16px;
+    }
+}
+
+// Ajout : recherche + formulaire
+.l-ajout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+
+    @include sous(bureau) {
+        grid-template-columns: 1fr;
+    }
+}

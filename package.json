@@ -1,0 +1,11 @@
+{
+  "name": "mangatheque",
+  "private": true,
+  "scripts": {
+    "build:css": "sass assets/scss/main.scss assets/css/main.css --style=compressed --source-map",
+    "watch:css": "sass assets/scss/main.scss assets/css/main.css --watch --source-map"
+  },
+  "devDependencies": {
+    "sass": "^1.83.0"
+  }
+}

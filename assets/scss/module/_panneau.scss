@@ -1,0 +1,24 @@
+// Module : panneau (section "Ma lecture")
+
+@use "../abstracts/mixins" as *;
+
+.panneau {
+    display: grid;
+    gap: 16px;
+    max-width: 720px;
+
+    &__titre {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.5rem;
+    }
+
+    &__kanji {
+        @include kanji(1.7rem);
+    }
+
+    &__danger {
+        padding-top: 8px;
+    }
+}

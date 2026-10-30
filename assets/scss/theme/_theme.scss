@@ -1,0 +1,41 @@
+// Theme — « washi & sumi » : papier japonais, encre, vermillon des sceaux, indigo, or
+
+$couleurs: (
+    "fond": #efe6d2,        // washi
+    "papier": #fcf8ef,      // papier clair (champs)
+    "surface": #f8f2e4,
+    "surface-2": #e8dcc2,
+    "bordure": #cdb994,
+    "texte": #221c18,       // sumi
+    "texte-doux": #6e5f4e,
+    "encre": #1d1916,       // laque noire (header, footer)
+    "encre-texte": #e9dfc9,
+    "accent": #b5332a,      // shu, vermillon des torii et des sceaux
+    "accent-fonce": #8c241d,
+    "or": #b08d3c,          // kin
+    "manga": #b5332a,
+    "manhwa": #2f4b6e,      // ai, indigo
+    "manhua": #56703a,      // matcha
+    "succes": #56703a,
+    "info": #2f4b6e,
+    "alerte": #b08d3c,
+    "danger": #9e2a22,
+);
+
+:root {
+    @each $nom, $valeur in $couleurs {
+        --couleur-#{$nom}: #{$valeur};
+    }
+
+    // Angles nets : on évite les formes trop arrondies
+    --rayon: 4px;
+    --rayon-petit: 2px;
+    --rayon-rond: 3px;
+    --ombre: 0 2px 0 var(--couleur-bordure), 0 14px 28px rgb(60 40 20 / 0.18);
+    --transition: 0.25s ease;
+
+    --police: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", Georgia, serif;
+    --police-titre: "Shippori Mincho B1", "Shippori Mincho", Georgia, serif;
+    --police-pinceau: "Yuji Syuku", "Shippori Mincho", serif;
+    --espace: 16px;
+}

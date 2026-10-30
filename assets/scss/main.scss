@@ -1,0 +1,31 @@
+// Point d'entrée SCSS — organisation SMACSS
+// 0. Abstracts : variables Sass et mixins (ne génèrent aucun CSS)
+// 1. Theme     : variables CSS (couleurs, rayons, typo)
+// 2. Base      : reset et styles des éléments HTML
+// 3. Layout    : grandes zones de la page (préfixe .l-)
+// 4. Module    : composants réutilisables, nommés en BEM (bloc__element--modificateur)
+// 5. State     : états temporaires (préfixe .is-)
+//
+// Compilation : npm run build:css (ou npm run watch:css)
+
+@use "theme/theme";
+@use "base/base";
+@use "layout/layout";
+
+@use "module/header";
+@use "module/nav";
+@use "module/footer";
+@use "module/bouton";
+@use "module/badge";
+@use "module/alerte";
+@use "module/entete-page";
+@use "module/filtres";
+@use "module/carte";
+@use "module/vide";
+@use "module/formulaire";
+@use "module/recherche";
+@use "module/apercu";
+@use "module/fiche";
+@use "module/panneau";
+
+@use "state/state";

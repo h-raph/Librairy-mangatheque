@@ -1,0 +1,87 @@
+@use "sass:map";
+@use "variables" as *;
+
+// Media query "en dessous de" : @include sous(tablette) { … }
+@mixin sous($point) {
+    @media (max-width: map.get($breakpoints, $point)) {
+        @content;
+    }
+}
+
+// Coupe un texte après $lignes lignes avec "…"
+@mixin line-clamp($lignes) {
+    display: -webkit-box;
+    -webkit-line-clamp: $lignes;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+// Champ de formulaire commun (filtres, formulaire, recherche)
+@mixin champ {
+    width: 100%;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-petit);
+    background: var(--couleur-papier);
+    transition: border-color var(--transition), box-shadow var(--transition);
+
+    &:focus {
+        border-color: var(--couleur-accent);
+        box-shadow: 0 0 0 3px rgb(181 51 42 / 0.15);
+        outline: none;
+    }
+}
+
+// Étiquette en petites capitales
+@mixin label-capitales {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--couleur-texte-doux);
+}
+
+// Texture de papier washi (bruit SVG très léger)
+@mixin washi {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .15 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+// Cadre double façon panneau de papier tendu
+@mixin cadre {
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon);
+    background-color: var(--couleur-surface);
+    box-shadow: inset 0 0 0 4px var(--couleur-surface), inset 0 0 0 5px rgb(205 185 148 / 0.6);
+}
+
+// Motif de vagues seigaiha (青海波) en dégradés radiaux
+@mixin seigaiha($fond, $trait, $taille: 60px) {
+    background-color: $fond;
+    background-image:
+        radial-gradient(circle at 100% 150%, $fond 24%, $trait 24%, $trait 28%, $fond 28%, $fond 36%, $trait 36%, $trait 40%, transparent 40%, transparent),
+        radial-gradient(circle at 0 150%, $fond 24%, $trait 24%, $trait 28%, $fond 28%, $fond 36%, $trait 36%, $trait 40%, transparent 40%, transparent),
+        radial-gradient(circle at 50% 100%, $trait 10%, $fond 10%, $fond 23%, $trait 23%, $trait 30%, $fond 30%, $fond 43%, $trait 43%, $trait 50%, $fond 50%, $fond 63%, $trait 63%, $trait 71%, transparent 71%, transparent),
+        radial-gradient(circle at 100% 50%, $trait 5%, $fond 5%, $fond 15%, $trait 15%, $trait 20%, $fond 20%, $fond 29%, $trait 29%, $trait 34%, $fond 34%, $fond 44%, $trait 44%, $trait 49%, transparent 49%, transparent),
+        radial-gradient(circle at 0 50%, $trait 5%, $fond 5%, $fond 15%, $trait 15%, $trait 20%, $fond 20%, $fond 29%, $trait 29%, $trait 34%, $fond 34%, $fond 44%, $trait 44%, $trait 49%, transparent 49%, transparent);
+    background-size: $taille calc($taille / 2);
+}
+
+// Baguette de bois d'un rouleau suspendu (kakejiku), sur un pseudo-élément
+@mixin baguette {
+    content: "";
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(var(--couleur-encre), #4a3b2f 60%, var(--couleur-encre));
+    box-shadow: 0 2px 3px rgb(0 0 0 / 0.25);
+}
+
+// Kanji décoratif au pinceau
+@mixin kanji($taille: 1.2em) {
+    font-family: var(--police-pinceau);
+    font-size: $taille;
+    font-weight: 400;
+    color: var(--couleur-accent);
+    line-height: 1;
+}

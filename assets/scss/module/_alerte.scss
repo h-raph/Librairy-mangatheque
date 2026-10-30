@@ -1,0 +1,22 @@
+// Module : alerte (bandes de papier)
+
+.alerte {
+    margin-bottom: var(--espace);
+    padding: 12px 16px;
+    border: 1px solid var(--couleur-bordure);
+    border-left: 4px solid var(--couleur-info);
+    border-radius: var(--rayon-petit);
+    background: var(--couleur-papier);
+
+    &--succes {
+        border-left-color: var(--couleur-succes);
+    }
+
+    &--erreur {
+        border-left-color: var(--couleur-danger);
+    }
+
+    &--info {
+        border-left-color: var(--couleur-info);
+    }
+}

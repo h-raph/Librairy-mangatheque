@@ -1,0 +1,39 @@
+@use "../abstracts/mixins" as *;
+
+// Module : nav
+
+.nav {
+    display: flex;
+    gap: 6px;
+
+    &__lien {
+        padding: 8px 14px;
+        border-radius: var(--rayon-petit);
+        font-family: var(--police-titre);
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        color: rgb(233 223 201 / 0.7);
+        transition: color var(--transition), box-shadow var(--transition), background var(--transition);
+
+        @include sous(mobile) {
+            padding: 8px 10px;
+            font-size: 0.95rem;
+        }
+
+        &:hover {
+            color: var(--couleur-encre-texte);
+            box-shadow: inset 0 -2px 0 var(--couleur-accent);
+        }
+
+        &--cta {
+            color: var(--couleur-surface);
+            background: var(--couleur-accent);
+
+            &:hover {
+                color: var(--couleur-surface);
+                background: var(--couleur-accent-fonce);
+                box-shadow: none;
+            }
+        }
+    }
+}
