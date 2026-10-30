@@ -1,21 +1,21 @@
 <?php
 
 const COLONNES_OEUVRE = [
-    'anilist_id', 'titre', 'titre_alternatif', 'type', 'langue', 'resume',
-    'cover_url', 'cover_locale', 'statut_publication', 'statut_lecture',
+    'anilist_id', 'titre', 'titre_alternatif', 'type', 'resume',
+    'cover_url', 'cover_locale', 'statut_publication', 'statut_lecture', 'favori',
     'chapitre_actuel', 'chapitres_total', 'lien', 'annee', 'anilist_synchro_le',
 ];
 
 const ORDRES_TRI = [
-    'recent' => 'o.cree_le DESC, o.id DESC',
-    'ancien' => 'o.cree_le ASC, o.id ASC',
     'az'     => 'o.titre ASC',
     'za'     => 'o.titre DESC',
+    'recent' => 'o.cree_le DESC, o.id DESC',
+    'ancien' => 'o.cree_le ASC, o.id ASC',
 ];
 
 /**
  * Liste les œuvres selon les filtres :
- * q (titre), genres (toutes requises), langue, type, statut, tri.
+ * q (titre), genres (toutes requises), type, statut, favoris, tri.
  */
 function oeuvres_lister(array $filtres): array
 {
@@ -27,10 +27,6 @@ function oeuvres_lister(array $filtres): array
         $parametres[] = '%' . $filtres['q'] . '%';
         $parametres[] = '%' . $filtres['q'] . '%';
     }
-    if ($filtres['langue'] !== '') {
-        $conditions[] = 'o.langue = ?';
-        $parametres[] = $filtres['langue'];
-    }
     if ($filtres['type'] !== '') {
         $conditions[] = 'o.type = ?';
         $parametres[] = $filtres['type'];
@@ -38,6 +34,9 @@ function oeuvres_lister(array $filtres): array
     if ($filtres['statut'] !== '') {
         $conditions[] = 'o.statut_lecture = ?';
         $parametres[] = $filtres['statut'];
+    }
+    if ($filtres['favoris']) {
+        $conditions[] = 'o.favori = 1';
     }
     if ($filtres['genres']) {
         $marqueurs = implode(', ', array_fill(0, count($filtres['genres']), '?'));
@@ -52,7 +51,7 @@ function oeuvres_lister(array $filtres): array
     }
 
     $where = $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
-    $ordre = ORDRES_TRI[$filtres['tri']] ?? ORDRES_TRI['recent'];
+    $ordre = ORDRES_TRI[$filtres['tri']] ?? ORDRES_TRI['az'];
 
     $requete = db()->prepare("
         SELECT o.*, GROUP_CONCAT(g.nom ORDER BY g.nom SEPARATOR '|') AS genres
@@ -132,6 +131,18 @@ function oeuvre_modifier(int $id, array $champs): void
         ->execute($champs + ['id' => $id]);
 }
 
+/** Inverse l'état favori et retourne le nouvel état (null si l'œuvre n'existe pas). */
+function oeuvre_basculer_favori(int $id): ?bool
+{
+    db()->prepare('UPDATE oeuvres SET favori = 1 - favori WHERE id = ?')->execute([$id]);
+
+    $requete = db()->prepare('SELECT favori FROM oeuvres WHERE id = ?');
+    $requete->execute([$id]);
+    $favori = $requete->fetchColumn();
+
+    return $favori === false ? null : (bool) $favori;
+}
+
 function oeuvre_supprimer(int $id): void
 {
     db()->prepare('DELETE FROM oeuvres WHERE id = ?')->execute([$id]);
@@ -158,12 +169,6 @@ function genres_utilises(): array
     return db()->query(
         'SELECT DISTINCT g.nom FROM genres g JOIN oeuvre_genre og ON og.genre_id = g.id ORDER BY g.nom'
     )->fetchAll(PDO::FETCH_COLUMN);
-}
-
-/** Langues présentes dans la bibliothèque (pour le filtre). */
-function langues_utilisees(): array
-{
-    return db()->query('SELECT DISTINCT langue FROM oeuvres ORDER BY langue')->fetchAll(PDO::FETCH_COLUMN);
 }
 
 function oeuvre_decoder_genres(array $oeuvre): array

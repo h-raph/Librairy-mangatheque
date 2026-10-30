@@ -10,7 +10,7 @@
     </footer>
 
     <?php foreach ($scripts ?? [] as $script): ?>
-        <script src="<?= e($script) ?>" defer></script>
+        <script src="<?= e(asset($script)) ?>" defer></script>
     <?php endforeach; ?>
 </body>
 </html>

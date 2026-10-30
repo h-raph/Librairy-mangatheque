@@ -17,7 +17,7 @@ Un résumé de tout le travail réalisé depuis le début, étape par étape, sa
 | `api/recherche.php` | Petit service appelé en JavaScript pendant que tu tapes dans la recherche |
 
 ### Les filtres
-Recherche par titre, **genres** (plusieurs à la fois), **langue**, type (manga / manhwa / manhua), statut de lecture, et **tri** : A → Z, Z → A, plus récent, plus ancien.
+Recherche par titre, **genres** (plusieurs à la fois), type (manga / manhwa / manhua), statut de lecture, **favoris**, et **tri** : A → Z (par défaut), Z → A, plus récent, plus ancien.
 
 ### Comment le code est rangé
 - `config/config.php` : les réglages (accès à la base, durée du cache).
@@ -52,7 +52,7 @@ Le fichier `sql/schema.sql` crée la base `manga_tracker` avec 4 tables :
 
 | Table | Contenu |
 | --- | --- |
-| `oeuvres` | Tes lectures (titre, type, langue, chapitre, lien, résumé, cover…) |
+| `oeuvres` | Tes lectures (titre, type, chapitre, favori, lien, résumé, cover…) |
 | `genres` | La liste des genres |
 | `oeuvre_genre` | Le lien entre une œuvre et ses genres (une œuvre peut avoir plusieurs genres) |
 | `anilist_cache` | Les réponses d'AniList mises de côté |
@@ -108,6 +108,15 @@ Thème **« washi & sumi »**, inspiré du papier japonais, de l'encre et des sc
 - **Filtres repliables :** sur un écran étroit, le panneau des filtres est replié et il suffit de toucher « Filtres » pour l'ouvrir. Un petit sceau rouge indique combien de filtres sont actifs. Le panneau reste ouvert d'une page à l'autre pendant la session, pour ne pas devoir le rouvrir à chaque filtre appliqué. Sur ordinateur, rien ne change.
 - **Header :** sur téléphone, seul le sceau 漫 est affiché à la place du nom complet, pour que le menu tienne sans déborder.
 - **Utiliser le site depuis le téléphone (même Wi-Fi) :** lancer le serveur avec `php -S 0.0.0.0:8000` (le chemin complet est plus bas), puis ouvrir `http://192.168.1.73:8000` sur le téléphone. L'IP du Mac peut changer.
+
+---
+
+## 7. Tri A → Z, langue retirée, favoris
+
+- **Tri par défaut :** la bibliothèque est maintenant classée de A à Z.
+- **Langue de lecture supprimée :** le champ a disparu des formulaires, des cartes, de la fiche et des filtres, et la colonne a été retirée de la base.
+- **Favoris :** une étoile sur chaque carte et un bouton sous la cover de la fiche. Elle devient dorée quand l'œuvre est en favori. Le clic s'enregistre sans recharger la page. Un filtre « ★ Favoris uniquement » permet de n'afficher que tes favoris.
+- **Base de données :** le changement a été fait avec le script `sql/migrations/001_favoris_sans_langue.sql`, déjà exécuté sur ta base MAMP. Tes œuvres ont été conservées. Ce script ne sert que pour une base créée avant ce changement : une nouvelle installation n'a besoin que de `schema.sql`.
 
 ---
 

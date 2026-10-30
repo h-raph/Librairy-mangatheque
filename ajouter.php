@@ -6,7 +6,6 @@ $valeurs = [
     'anilist_id'      => '',
     'titre'           => '',
     'type'            => 'manga',
-    'langue'          => 'fr',
     'statut_lecture'  => 'en_cours',
     'chapitre_actuel' => 0,
     'lien'            => '',
@@ -24,9 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!isset(TYPES[$valeurs['type']])) {
         $erreurs[] = 'Type invalide.';
-    }
-    if (!isset(LANGUES[$valeurs['langue']])) {
-        $erreurs[] = 'Langue invalide.';
     }
     if (!isset(STATUTS_LECTURE[$valeurs['statut_lecture']])) {
         $erreurs[] = 'Statut de lecture invalide.';
@@ -65,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $oeuvre = [
             'titre'           => $valeurs['titre'],
             'type'            => $valeurs['type'],
-            'langue'          => $valeurs['langue'],
             'statut_lecture'  => $valeurs['statut_lecture'],
             'chapitre_actuel' => $valeurs['chapitre_actuel'],
             'lien'            => $valeurs['lien'] ?: null,
@@ -144,23 +139,13 @@ require __DIR__ . '/templates/header.php';
             <p class="formulaire__aide">Rempli automatiquement depuis AniList, modifiable.</p>
         </div>
 
-        <div class="formulaire__ligne">
-            <div class="formulaire__groupe">
-                <label class="formulaire__label" for="type">Type</label>
-                <select class="formulaire__champ" id="type" name="type" data-champ-type>
-                    <?php foreach (TYPES as $valeur => $libelle): ?>
-                        <option value="<?= e($valeur) ?>" <?= $valeurs['type'] === $valeur ? 'selected' : '' ?>><?= e($libelle) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="formulaire__groupe">
-                <label class="formulaire__label" for="langue">Langue de lecture</label>
-                <select class="formulaire__champ" id="langue" name="langue">
-                    <?php foreach (LANGUES as $valeur => $libelle): ?>
-                        <option value="<?= e($valeur) ?>" <?= $valeurs['langue'] === $valeur ? 'selected' : '' ?>><?= e($libelle) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+        <div class="formulaire__groupe">
+            <label class="formulaire__label" for="type">Type</label>
+            <select class="formulaire__champ" id="type" name="type" data-champ-type>
+                <?php foreach (TYPES as $valeur => $libelle): ?>
+                    <option value="<?= e($valeur) ?>" <?= $valeurs['type'] === $valeur ? 'selected' : '' ?>><?= e($libelle) ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <div class="formulaire__ligne">

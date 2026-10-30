@@ -12,7 +12,7 @@ $progression = $oeuvre['chapitres_total']
         </div>
         <div class="carte__corps">
             <h3 class="carte__titre"><?= e($oeuvre['titre']) ?></h3>
-            <p class="carte__meta"><?= e($progression) ?> · <?= e(libelle(LANGUES, $oeuvre['langue'])) ?></p>
+            <p class="carte__meta"><?= e($progression) ?></p>
             <span class="badge badge--statut badge--<?= e(modificateur($oeuvre['statut_lecture'])) ?>">
                 <?= e(libelle(STATUTS_LECTURE, $oeuvre['statut_lecture'])) ?>
             </span>
@@ -25,4 +25,5 @@ $progression = $oeuvre['chapitres_total']
             <?php endif; ?>
         </div>
     </a>
+    <?php $classeFavori = 'favori--carte'; require __DIR__ . '/bouton-favori.php'; ?>
 </article>

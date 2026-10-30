@@ -1,0 +1,87 @@
+// Module : favori (étoile dorée, sur les cartes et la fiche)
+
+.favori {
+    margin: 0;
+
+    &__bouton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid transparent;
+        border-radius: var(--rayon-petit);
+        font-family: var(--police-titre);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition);
+
+        &:active {
+            transform: scale(0.94);
+        }
+    }
+
+    &__icone {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linejoin: round;
+        transition: fill var(--transition);
+    }
+
+    // Sur une carte : médaillon de laque cerclé d'or (façon mon), aligné sur le sceau du type
+    &--carte {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 1;
+
+        .favori__bouton {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border-radius: 50%;
+            color: var(--couleur-encre-texte);
+            background: rgb(29 25 22 / 0.85);
+            border: 1px solid var(--couleur-or);
+            box-shadow: 0 0 0 2px rgb(29 25 22 / 0.35), 0 2px 6px rgb(0 0 0 / 0.35);
+
+            &:hover {
+                color: #e6c35c;
+                background: var(--couleur-encre);
+            }
+        }
+
+        .favori__icone {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2;
+        }
+
+        .favori__texte {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+        }
+    }
+
+    // Sur la fiche : bouton pleine largeur sous la cover
+    &--fiche .favori__bouton {
+        width: 100%;
+        padding: 10px 18px;
+        color: var(--couleur-texte);
+        background: transparent;
+        border-color: var(--couleur-or);
+
+        .favori__icone {
+            color: var(--couleur-or);
+        }
+
+        &:hover {
+            background: rgb(176 141 60 / 0.12);
+        }
+    }
+}

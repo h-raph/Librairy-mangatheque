@@ -6,15 +6,6 @@ const TYPES = [
     'manhua' => 'Manhua',
 ];
 
-const LANGUES = [
-    'fr' => 'Français',
-    'en' => 'Anglais',
-    'es' => 'Espagnol',
-    'ja' => 'Japonais',
-    'ko' => 'Coréen',
-    'zh' => 'Chinois',
-];
-
 const STATUTS_LECTURE = [
     'en_cours'  => 'En cours',
     'a_lire'    => 'À lire',
@@ -32,10 +23,10 @@ const STATUTS_PUBLICATION = [
 ];
 
 const TRIS = [
-    'recent' => 'Plus récent',
-    'ancien' => 'Plus ancien',
     'az'     => 'A → Z',
     'za'     => 'Z → A',
+    'recent' => 'Plus récent',
+    'ancien' => 'Plus ancien',
 ];
 
 const GENRES_FR = [
@@ -87,9 +78,21 @@ function modificateur(string $valeur): string
     return str_replace('_', '-', strtolower($valeur));
 }
 
+/** Ajoute la date de modification du fichier à son URL pour que le navigateur recharge les nouvelles versions. */
+function asset(string $chemin): string
+{
+    $fichier = __DIR__ . '/../' . $chemin;
+    return is_file($fichier) ? $chemin . '?v=' . filemtime($fichier) : $chemin;
+}
+
+/** Cover locale si le fichier existe, sinon celle d'AniList, sinon l'image par défaut. */
 function cover(array $oeuvre): string
 {
-    return $oeuvre['cover_locale'] ?: ($oeuvre['cover_url'] ?: 'assets/img/placeholder.svg');
+    if ($oeuvre['cover_locale'] && is_file(__DIR__ . '/../' . $oeuvre['cover_locale'])) {
+        return $oeuvre['cover_locale'];
+    }
+
+    return $oeuvre['cover_url'] ?: 'assets/img/placeholder.svg';
 }
 
 function redirection(string $url): never

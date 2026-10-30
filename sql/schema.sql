@@ -14,12 +14,12 @@ CREATE TABLE IF NOT EXISTS oeuvres (
     titre               VARCHAR(255) NOT NULL,
     titre_alternatif    VARCHAR(255) NULL,
     type                ENUM('manga', 'manhwa', 'manhua') NOT NULL DEFAULT 'manga',
-    langue              VARCHAR(5) NOT NULL DEFAULT 'fr',
     resume              TEXT NULL,
     cover_url           VARCHAR(500) NULL,
     cover_locale        VARCHAR(255) NULL,
     statut_publication  VARCHAR(30) NULL,
     statut_lecture      ENUM('en_cours', 'a_lire', 'termine', 'en_pause', 'abandonne') NOT NULL DEFAULT 'en_cours',
+    favori              TINYINT(1) NOT NULL DEFAULT 0,
     chapitre_actuel     INT UNSIGNED NOT NULL DEFAULT 0,
     chapitres_total     INT UNSIGNED NULL,
     lien                VARCHAR(500) NULL,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS oeuvres (
     PRIMARY KEY (id),
     UNIQUE KEY uq_oeuvres_anilist (anilist_id),
     KEY idx_oeuvres_titre (titre),
-    KEY idx_oeuvres_langue (langue),
+    KEY idx_oeuvres_favori (favori),
     KEY idx_oeuvres_cree_le (cree_le)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

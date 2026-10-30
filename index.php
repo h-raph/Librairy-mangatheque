@@ -5,21 +5,21 @@ require __DIR__ . '/src/bootstrap.php';
 $filtres = [
     'q'      => trim((string) ($_GET['q'] ?? '')),
     'genres' => array_values(array_filter((array) ($_GET['genres'] ?? []), 'is_string')),
-    'langue' => array_key_exists($_GET['langue'] ?? '', LANGUES) ? $_GET['langue'] : '',
     'type'   => array_key_exists($_GET['type'] ?? '', TYPES) ? $_GET['type'] : '',
     'statut' => array_key_exists($_GET['statut'] ?? '', STATUTS_LECTURE) ? $_GET['statut'] : '',
-    'tri'    => array_key_exists($_GET['tri'] ?? '', TRIS) ? $_GET['tri'] : 'recent',
+    'favoris' => !empty($_GET['favoris']),
+    'tri'    => array_key_exists($_GET['tri'] ?? '', TRIS) ? $_GET['tri'] : 'az',
 ];
 
 $oeuvres = oeuvres_lister($filtres);
 $genres = genres_utilises();
-$langues = langues_utilisees();
-$nbFiltres = ($filtres['q'] !== '') + count($filtres['genres']) + ($filtres['langue'] !== '') + ($filtres['type'] !== '') + ($filtres['statut'] !== '');
+$nbFiltres = (int) ($filtres['q'] !== '') + count($filtres['genres']) + (int) ($filtres['type'] !== '')
+    + (int) ($filtres['statut'] !== '') + (int) $filtres['favoris'];
 $filtreActif = $nbFiltres > 0;
 
 $titrePage = 'Bibliothèque';
 $pageActive = 'bibliotheque';
-$scripts = ['assets/js/filtres.js'];
+$scripts = ['assets/js/filtres.js', 'assets/js/favori.js'];
 require __DIR__ . '/templates/header.php';
 ?>
 
@@ -53,16 +53,6 @@ require __DIR__ . '/templates/header.php';
                 </div>
 
                 <div class="filtres__groupe">
-                    <label class="filtres__label" for="langue">Langue</label>
-                    <select class="filtres__champ" id="langue" name="langue">
-                        <option value="">Toutes</option>
-                        <?php foreach ($langues as $langue): ?>
-                            <option value="<?= e($langue) ?>" <?= $filtres['langue'] === $langue ? 'selected' : '' ?>><?= e(libelle(LANGUES, $langue)) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <div class="filtres__groupe">
                     <label class="filtres__label" for="type">Type</label>
                     <select class="filtres__champ" id="type" name="type">
                         <option value="">Tous</option>
@@ -80,6 +70,14 @@ require __DIR__ . '/templates/header.php';
                             <option value="<?= e($valeur) ?>" <?= $filtres['statut'] === $valeur ? 'selected' : '' ?>><?= e($libelle) ?></option>
                         <?php endforeach; ?>
                     </select>
+                </div>
+
+                <div class="filtres__groupe">
+                    <span class="filtres__label">Favoris</span>
+                    <label class="filtres__puce">
+                        <input class="filtres__case" type="checkbox" name="favoris" value="1" <?= $filtres['favoris'] ? 'checked' : '' ?>>
+                        <span class="filtres__puce-texte">★ Favoris uniquement</span>
+                    </label>
                 </div>
 
                 <?php if ($genres): ?>

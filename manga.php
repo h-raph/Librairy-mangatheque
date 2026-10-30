@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $champs = [
                 'titre'           => trim((string) ($_POST['titre'] ?? '')) ?: $oeuvre['titre'],
                 'type'            => isset(TYPES[$_POST['type'] ?? '']) ? $_POST['type'] : $oeuvre['type'],
-                'langue'          => isset(LANGUES[$_POST['langue'] ?? '']) ? $_POST['langue'] : $oeuvre['langue'],
                 'statut_lecture'  => isset(STATUTS_LECTURE[$_POST['statut_lecture'] ?? '']) ? $_POST['statut_lecture'] : $oeuvre['statut_lecture'],
                 'chapitre_actuel' => max(0, (int) ($_POST['chapitre_actuel'] ?? 0)),
                 'lien'            => filter_var(trim((string) ($_POST['lien'] ?? '')), FILTER_VALIDATE_URL) ?: null,
@@ -68,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $titrePage = $oeuvre['titre'];
 $pageActive = '';
+$scripts = ['assets/js/favori.js'];
 require __DIR__ . '/templates/header.php';
 ?>
 
@@ -78,6 +78,7 @@ require __DIR__ . '/templates/header.php';
         <div class="fiche__cadre">
             <img class="fiche__image" src="<?= e(cover($oeuvre)) ?>" alt="Cover de <?= e($oeuvre['titre']) ?>">
         </div>
+        <?php $classeFavori = 'favori--fiche'; require __DIR__ . '/templates/partials/bouton-favori.php'; ?>
         <?php if ($oeuvre['lien']): ?>
             <a class="bouton bouton--principal bouton--large" href="<?= e($oeuvre['lien']) ?>" target="_blank" rel="noopener">Lire le chapitre <?= (int) $oeuvre['chapitre_actuel'] + 1 ?></a>
         <?php endif; ?>
@@ -92,7 +93,6 @@ require __DIR__ . '/templates/header.php';
         <div class="fiche__badges">
             <span class="badge badge--<?= e($oeuvre['type']) ?>"><?= e(libelle(TYPES, $oeuvre['type'])) ?></span>
             <span class="badge badge--statut badge--<?= e(modificateur($oeuvre['statut_lecture'])) ?>"><?= e(libelle(STATUTS_LECTURE, $oeuvre['statut_lecture'])) ?></span>
-            <span class="badge badge--neutre"><?= e(libelle(LANGUES, $oeuvre['langue'])) ?></span>
         </div>
 
         <h1 class="fiche__titre"><?= e($oeuvre['titre']) ?></h1>
@@ -161,23 +161,13 @@ require __DIR__ . '/templates/header.php';
             <input class="formulaire__champ" type="text" id="titre" name="titre" value="<?= e($oeuvre['titre']) ?>" required>
         </div>
 
-        <div class="formulaire__ligne">
-            <div class="formulaire__groupe">
-                <label class="formulaire__label" for="type">Type</label>
-                <select class="formulaire__champ" id="type" name="type">
-                    <?php foreach (TYPES as $valeur => $libelle): ?>
-                        <option value="<?= e($valeur) ?>" <?= $oeuvre['type'] === $valeur ? 'selected' : '' ?>><?= e($libelle) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="formulaire__groupe">
-                <label class="formulaire__label" for="langue">Langue de lecture</label>
-                <select class="formulaire__champ" id="langue" name="langue">
-                    <?php foreach (LANGUES as $valeur => $libelle): ?>
-                        <option value="<?= e($valeur) ?>" <?= $oeuvre['langue'] === $valeur ? 'selected' : '' ?>><?= e($libelle) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+        <div class="formulaire__groupe">
+            <label class="formulaire__label" for="type">Type</label>
+            <select class="formulaire__champ" id="type" name="type">
+                <?php foreach (TYPES as $valeur => $libelle): ?>
+                    <option value="<?= e($valeur) ?>" <?= $oeuvre['type'] === $valeur ? 'selected' : '' ?>><?= e($libelle) ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <div class="formulaire__ligne">

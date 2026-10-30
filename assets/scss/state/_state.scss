@@ -36,6 +36,27 @@
     }
 }
 
+// Œuvre en favori : étoile pleine dorée
+.favori__bouton.is-active {
+    color: var(--couleur-or);
+
+    .favori__icone {
+        fill: currentColor;
+    }
+}
+
+.favori--carte .favori__bouton.is-active {
+    color: #e6c35c;
+    background: var(--couleur-encre);
+    border-color: #e6c35c;
+    box-shadow: 0 0 0 2px rgb(230 195 92 / 0.25), 0 2px 8px rgb(0 0 0 / 0.4);
+}
+
+.favori--fiche .favori__bouton.is-active {
+    color: var(--couleur-encre);
+    background: rgb(176 141 60 / 0.18);
+}
+
 // Recherche en cours : spinner visible
 .is-loading .recherche__chargement {
     opacity: 1;
