@@ -14,7 +14,7 @@ Suivi des mangas, manhwas et manhuas lus en ligne. PHP 8 + MySQL, données récu
      ```
      puis ouvrir http://localhost:8000
 4. Si les identifiants MySQL diffèrent, modifier `config/config.php`.
-5. Base créée avant l'ajout des favoris ? Exécuter aussi `sql/migrations/001_favoris_sans_langue.sql`.
+5. Base déjà existante ? Exécuter les scripts de `sql/migrations/` qui n'ont pas encore été lancés (dans l'ordre).
 
 Le dossier `assets/covers/` doit être accessible en écriture (les covers y sont téléchargées).
 
@@ -22,9 +22,9 @@ Le dossier `assets/covers/` doit être accessible en écriture (les covers y son
 
 | Page | Rôle |
 | --- | --- |
-| `index.php` | Bibliothèque : grille + filtres (recherche, genres, type, statut, favoris, tri A→Z par défaut / Z→A / récent / ancien) |
+| `index.php` | Bibliothèque : grille + filtres (recherche, genres, type, statut, favoris, physique, tri A→Z par défaut / Z→A / récent / ancien) |
 | `ajouter.php` | Ajout : recherche AniList avec pré-remplissage, ou saisie manuelle |
-| `manga.php?id=` | Fiche : résumé, genres, progression, +1 chapitre, modification, actualisation AniList, suppression |
+| `manga.php?id=` | Fiche : résumé, genres, progression, possession en physique, +1 chapitre ou volume, modification, actualisation AniList, suppression |
 | `api/recherche.php?q=` | Endpoint JSON utilisé par la recherche |
 | `favori.php` | Ajoute / retire une œuvre des favoris (JSON avec JS, redirection sans) |
 

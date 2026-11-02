@@ -8,6 +8,8 @@ $valeurs = [
     'type'            => 'manga',
     'statut_lecture'  => 'en_cours',
     'chapitre_actuel' => 0,
+    'physique'        => 0,
+    'volume_actuel'   => 0,
     'lien'            => '',
     'resume'          => '',
     'cover_url'       => '',
@@ -19,6 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $valeurs = array_map(fn ($v) => is_string($v) ? trim($v) : '', array_intersect_key($_POST, $valeurs)) + $valeurs;
     $valeurs['chapitre_actuel'] = max(0, (int) $valeurs['chapitre_actuel']);
+    $valeurs['volume_actuel'] = max(0, (int) $valeurs['volume_actuel']);
+    $valeurs['physique'] = $valeurs['physique'] ? 1 : 0;
     $anilistId = (int) $valeurs['anilist_id'];
 
     if (!isset(TYPES[$valeurs['type']])) {
@@ -63,6 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'type'            => $valeurs['type'],
             'statut_lecture'  => $valeurs['statut_lecture'],
             'chapitre_actuel' => $valeurs['chapitre_actuel'],
+            'physique'        => $valeurs['physique'],
+            'volume_actuel'   => $valeurs['volume_actuel'],
             'lien'            => $valeurs['lien'] ?: null,
             'resume'          => $valeurs['resume'] ?: null,
             'cover_url'       => $valeurs['cover_url'] ?: null,
@@ -79,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'cover_locale'       => telecharger_cover($media['cover_url'], $media['anilist_id']),
                 'statut_publication' => $media['statut_publication'],
                 'chapitres_total'    => $media['chapitres_total'],
+                'volumes_total'      => $media['volumes_total'],
                 'annee'              => $media['annee'],
                 'anilist_synchro_le' => date('Y-m-d H:i:s'),
             ] + $oeuvre;
@@ -157,11 +164,20 @@ require __DIR__ . '/templates/header.php';
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="formulaire__groupe">
+            <div class="formulaire__groupe <?= $valeurs['physique'] ? 'is-hidden' : '' ?>" data-progression-chapitre>
                 <label class="formulaire__label" for="chapitre_actuel">Chapitre actuel</label>
                 <input class="formulaire__champ" type="number" min="0" id="chapitre_actuel" name="chapitre_actuel" value="<?= (int) $valeurs['chapitre_actuel'] ?>">
             </div>
+            <div class="formulaire__groupe <?= $valeurs['physique'] ? '' : 'is-hidden' ?>" data-progression-volume>
+                <label class="formulaire__label" for="volume_actuel">Volume actuel</label>
+                <input class="formulaire__champ" type="number" min="0" id="volume_actuel" name="volume_actuel" value="<?= (int) $valeurs['volume_actuel'] ?>">
+            </div>
         </div>
+
+        <label class="formulaire__option">
+            <input class="formulaire__case" type="checkbox" name="physique" value="1" <?= $valeurs['physique'] ? 'checked' : '' ?> data-champ-physique>
+            Je l'ai en physique (suivi par volume)
+        </label>
 
         <div class="formulaire__groupe">
             <label class="formulaire__label" for="lien">Lien de lecture</label>

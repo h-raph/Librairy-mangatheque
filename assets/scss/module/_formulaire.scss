@@ -38,6 +38,20 @@
         }
     }
 
+    &__option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.95rem;
+        cursor: pointer;
+    }
+
+    &__case {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--couleur-accent);
+    }
+
     &__aide {
         font-size: 0.8rem;
         color: var(--couleur-texte-doux);

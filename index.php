@@ -8,13 +8,14 @@ $filtres = [
     'type'   => array_key_exists($_GET['type'] ?? '', TYPES) ? $_GET['type'] : '',
     'statut' => array_key_exists($_GET['statut'] ?? '', STATUTS_LECTURE) ? $_GET['statut'] : '',
     'favoris' => !empty($_GET['favoris']),
+    'physique' => !empty($_GET['physique']),
     'tri'    => array_key_exists($_GET['tri'] ?? '', TRIS) ? $_GET['tri'] : 'az',
 ];
 
 $oeuvres = oeuvres_lister($filtres);
 $genres = genres_utilises();
 $nbFiltres = (int) ($filtres['q'] !== '') + count($filtres['genres']) + (int) ($filtres['type'] !== '')
-    + (int) ($filtres['statut'] !== '') + (int) $filtres['favoris'];
+    + (int) ($filtres['statut'] !== '') + (int) $filtres['favoris'] + (int) $filtres['physique'];
 $filtreActif = $nbFiltres > 0;
 
 $titrePage = 'Bibliothèque';
@@ -73,11 +74,17 @@ require __DIR__ . '/templates/header.php';
                 </div>
 
                 <div class="filtres__groupe">
-                    <span class="filtres__label">Favoris</span>
-                    <label class="filtres__puce">
-                        <input class="filtres__case" type="checkbox" name="favoris" value="1" <?= $filtres['favoris'] ? 'checked' : '' ?>>
-                        <span class="filtres__puce-texte">★ Favoris uniquement</span>
-                    </label>
+                    <span class="filtres__label">Ma collection</span>
+                    <div class="filtres__puces">
+                        <label class="filtres__puce">
+                            <input class="filtres__case" type="checkbox" name="favoris" value="1" <?= $filtres['favoris'] ? 'checked' : '' ?>>
+                            <span class="filtres__puce-texte">★ Favoris uniquement</span>
+                        </label>
+                        <label class="filtres__puce">
+                            <input class="filtres__case" type="checkbox" name="physique" value="1" <?= $filtres['physique'] ? 'checked' : '' ?>>
+                            <span class="filtres__puce-texte">Physique uniquement</span>
+                        </label>
+                    </div>
                 </div>
 
                 <?php if ($genres): ?>

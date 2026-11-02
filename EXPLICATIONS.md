@@ -120,6 +120,16 @@ Thème **« washi & sumi »**, inspiré du papier japonais, de l'encre et des sc
 
 ---
 
+## 8. Possession en physique et suivi par volume
+
+- **Bouton « Je l'ai en physique » :** sur la fiche d'une œuvre, et sous forme de case à cocher dans le formulaire d'ajout.
+- **Suivi par volume :** en physique, le volume remplace le chapitre sur la carte (`Vol. 3 / 15`), la fiche, le formulaire et le bouton « +1 volume lu ». Le total vient d'AniList quand il est connu.
+- **Filtre :** « Physique uniquement » n'affiche que les œuvres que tu possèdes.
+- **Rien n'est perdu :** chapitre et volume sont enregistrés séparément. Si tu décoches le physique, tu retrouves ton chapitre.
+- **Base de données :** script `sql/migrations/002_physique_volumes.sql`, à lancer une fois sur chaque base (MAMP et alwaysdata). Tes œuvres sont conservées.
+
+---
+
 ## Pour lancer le site
 
 1. Démarrer **MAMP**.

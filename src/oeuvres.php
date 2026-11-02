@@ -2,8 +2,8 @@
 
 const COLONNES_OEUVRE = [
     'anilist_id', 'titre', 'titre_alternatif', 'type', 'resume',
-    'cover_url', 'cover_locale', 'statut_publication', 'statut_lecture', 'favori',
-    'chapitre_actuel', 'chapitres_total', 'lien', 'annee', 'anilist_synchro_le',
+    'cover_url', 'cover_locale', 'statut_publication', 'statut_lecture', 'favori', 'physique',
+    'chapitre_actuel', 'chapitres_total', 'volume_actuel', 'volumes_total', 'lien', 'annee', 'anilist_synchro_le',
 ];
 
 const ORDRES_TRI = [
@@ -15,7 +15,7 @@ const ORDRES_TRI = [
 
 /**
  * Liste les œuvres selon les filtres :
- * q (titre), genres (toutes requises), type, statut, favoris, tri.
+ * q (titre), genres (toutes requises), type, statut, favoris, physique, tri.
  */
 function oeuvres_lister(array $filtres): array
 {
@@ -37,6 +37,9 @@ function oeuvres_lister(array $filtres): array
     }
     if ($filtres['favoris']) {
         $conditions[] = 'o.favori = 1';
+    }
+    if ($filtres['physique']) {
+        $conditions[] = 'o.physique = 1';
     }
     if ($filtres['genres']) {
         $marqueurs = implode(', ', array_fill(0, count($filtres['genres']), '?'));

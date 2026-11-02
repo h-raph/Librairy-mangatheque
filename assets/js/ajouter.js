@@ -129,3 +129,11 @@ champ.addEventListener('input', () => {
 });
 
 apercu.querySelector('[data-apercu-retirer]').addEventListener('click', retirer);
+
+// En physique, on suit le volume plutôt que le chapitre
+const champPhysique = document.querySelector('[data-champ-physique]');
+
+champPhysique.addEventListener('change', () => {
+    document.querySelector('[data-progression-chapitre]').classList.toggle('is-hidden', champPhysique.checked);
+    document.querySelector('[data-progression-volume]').classList.toggle('is-hidden', !champPhysique.checked);
+});

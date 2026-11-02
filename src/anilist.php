@@ -10,6 +10,7 @@ const ANILIST_CHAMPS = '
     status
     countryOfOrigin
     chapters
+    volumes
     startDate { year }
 ';
 
@@ -133,6 +134,7 @@ function anilist_normaliser(array $media): array
         'cover_url'          => $media['coverImage']['extraLarge'] ?? $media['coverImage']['large'] ?? null,
         'statut_publication' => $media['status'] ?? null,
         'chapitres_total'    => $media['chapters'] ?? null,
+        'volumes_total'      => $media['volumes'] ?? null,
         'annee'              => $media['startDate']['year'] ?? null,
         'genres'             => $media['genres'] ?? [],
     ];

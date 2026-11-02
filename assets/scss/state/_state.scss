@@ -36,6 +36,12 @@
     }
 }
 
+// Œuvre possédée en physique : bouton plein, couleur d'encre
+.bouton--secondaire.is-active {
+    color: var(--couleur-surface);
+    background: var(--couleur-encre);
+}
+
 // Œuvre en favori : étoile pleine dorée
 .favori__bouton.is-active {
     color: var(--couleur-or);

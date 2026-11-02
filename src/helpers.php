@@ -78,6 +78,16 @@ function modificateur(string $valeur): string
     return str_replace('_', '-', strtolower($valeur));
 }
 
+/** Avancement de lecture : en volumes si l'œuvre est possédée en physique, sinon en chapitres. */
+function progression(array $oeuvre, bool $court = false): string
+{
+    [$libelle, $abrege, $actuel, $total] = $oeuvre['physique']
+        ? ['Volume', 'Vol.', $oeuvre['volume_actuel'], $oeuvre['volumes_total']]
+        : ['Chapitre', 'Ch.', $oeuvre['chapitre_actuel'], $oeuvre['chapitres_total']];
+
+    return ($court ? $abrege : $libelle) . ' ' . (int) $actuel . ($total ? ' / ' . (int) $total : '');
+}
+
 /** Ajoute la date de modification du fichier à son URL pour que le navigateur recharge les nouvelles versions. */
 function asset(string $chemin): string
 {

@@ -1,8 +1,5 @@
 <?php
 /** @var array $oeuvre */
-$progression = $oeuvre['chapitres_total']
-    ? "Ch. {$oeuvre['chapitre_actuel']} / {$oeuvre['chapitres_total']}"
-    : "Ch. {$oeuvre['chapitre_actuel']}";
 ?>
 <article class="carte">
     <a class="carte__lien" href="manga.php?id=<?= (int) $oeuvre['id'] ?>">
@@ -12,10 +9,13 @@ $progression = $oeuvre['chapitres_total']
         </div>
         <div class="carte__corps">
             <h3 class="carte__titre"><?= e($oeuvre['titre']) ?></h3>
-            <p class="carte__meta"><?= e($progression) ?></p>
+            <p class="carte__meta"><?= e(progression($oeuvre, true)) ?></p>
             <span class="badge badge--statut badge--<?= e(modificateur($oeuvre['statut_lecture'])) ?>">
                 <?= e(libelle(STATUTS_LECTURE, $oeuvre['statut_lecture'])) ?>
             </span>
+            <?php if ($oeuvre['physique']): ?>
+                <span class="badge badge--neutre">Physique</span>
+            <?php endif; ?>
             <?php if ($oeuvre['genres']): ?>
                 <ul class="carte__genres">
                     <?php foreach (array_slice($oeuvre['genres'], 0, 3) as $genre): ?>

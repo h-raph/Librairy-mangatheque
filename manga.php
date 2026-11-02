@@ -13,22 +13,31 @@ if (!$oeuvre) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verifier();
 
+    // On n'avance que le compteur affiché : l'autre garde sa valeur si on rebascule plus tard
+    $colonneProgression = $oeuvre['physique'] ? 'volume_actuel' : 'chapitre_actuel';
+
     switch ($_POST['action'] ?? '') {
         case 'modifier':
             $champs = [
                 'titre'           => trim((string) ($_POST['titre'] ?? '')) ?: $oeuvre['titre'],
                 'type'            => isset(TYPES[$_POST['type'] ?? '']) ? $_POST['type'] : $oeuvre['type'],
                 'statut_lecture'  => isset(STATUTS_LECTURE[$_POST['statut_lecture'] ?? '']) ? $_POST['statut_lecture'] : $oeuvre['statut_lecture'],
-                'chapitre_actuel' => max(0, (int) ($_POST['chapitre_actuel'] ?? 0)),
+                $colonneProgression => max(0, (int) ($_POST[$colonneProgression] ?? 0)),
                 'lien'            => filter_var(trim((string) ($_POST['lien'] ?? '')), FILTER_VALIDATE_URL) ?: null,
             ];
             oeuvre_modifier($id, $champs);
             flash('succes', 'Lecture mise à jour.');
             break;
 
-        case 'chapitre_suivant':
-            oeuvre_modifier($id, ['chapitre_actuel' => $oeuvre['chapitre_actuel'] + 1]);
-            flash('succes', 'Chapitre ' . ($oeuvre['chapitre_actuel'] + 1) . ' enregistré.');
+        case 'progression_suivante':
+            $suivant = $oeuvre[$colonneProgression] + 1;
+            oeuvre_modifier($id, [$colonneProgression => $suivant]);
+            flash('succes', ($oeuvre['physique'] ? 'Volume ' : 'Chapitre ') . $suivant . ' enregistré.');
+            break;
+
+        case 'basculer_physique':
+            oeuvre_modifier($id, ['physique' => $oeuvre['physique'] ? 0 : 1]);
+            flash('succes', $oeuvre['physique'] ? 'Œuvre retirée du physique : suivi par chapitre.' : 'Œuvre en physique : suivi par volume.');
             break;
 
         case 'synchroniser':
@@ -45,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'cover_locale'       => telecharger_cover($media['cover_url'], $media['anilist_id']) ?? $oeuvre['cover_locale'],
                         'statut_publication' => $media['statut_publication'],
                         'chapitres_total'    => $media['chapitres_total'],
+                        'volumes_total'      => $media['volumes_total'],
                         'annee'              => $media['annee'],
                         'anilist_synchro_le' => date('Y-m-d H:i:s'),
                     ]);
@@ -79,13 +89,22 @@ require __DIR__ . '/templates/header.php';
             <img class="fiche__image" src="<?= e(cover($oeuvre)) ?>" alt="Cover de <?= e($oeuvre['titre']) ?>">
         </div>
         <?php $classeFavori = 'favori--fiche'; require __DIR__ . '/templates/partials/bouton-favori.php'; ?>
+        <form method="post" class="fiche__action">
+            <?= csrf_champ() ?>
+            <input type="hidden" name="action" value="basculer_physique">
+            <button class="bouton bouton--secondaire bouton--large <?= $oeuvre['physique'] ? 'is-active' : '' ?>" type="submit" aria-pressed="<?= $oeuvre['physique'] ? 'true' : 'false' ?>">
+                <?= $oeuvre['physique'] ? '✓ En physique' : 'Je l\'ai en physique' ?>
+            </button>
+        </form>
         <?php if ($oeuvre['lien']): ?>
-            <a class="bouton bouton--principal bouton--large" href="<?= e($oeuvre['lien']) ?>" target="_blank" rel="noopener">Lire le chapitre <?= (int) $oeuvre['chapitre_actuel'] + 1 ?></a>
+            <a class="bouton bouton--principal bouton--large" href="<?= e($oeuvre['lien']) ?>" target="_blank" rel="noopener">
+                <?= $oeuvre['physique'] ? 'Lire en ligne' : 'Lire le chapitre ' . ((int) $oeuvre['chapitre_actuel'] + 1) ?>
+            </a>
         <?php endif; ?>
         <form method="post" class="fiche__action">
             <?= csrf_champ() ?>
-            <input type="hidden" name="action" value="chapitre_suivant">
-            <button class="bouton bouton--secondaire bouton--large" type="submit">+1 chapitre lu</button>
+            <input type="hidden" name="action" value="progression_suivante">
+            <button class="bouton bouton--secondaire bouton--large" type="submit"><?= $oeuvre['physique'] ? '+1 volume lu' : '+1 chapitre lu' ?></button>
         </form>
     </div>
 
@@ -93,6 +112,9 @@ require __DIR__ . '/templates/header.php';
         <div class="fiche__badges">
             <span class="badge badge--<?= e($oeuvre['type']) ?>"><?= e(libelle(TYPES, $oeuvre['type'])) ?></span>
             <span class="badge badge--statut badge--<?= e(modificateur($oeuvre['statut_lecture'])) ?>"><?= e(libelle(STATUTS_LECTURE, $oeuvre['statut_lecture'])) ?></span>
+            <?php if ($oeuvre['physique']): ?>
+                <span class="badge badge--neutre">Physique</span>
+            <?php endif; ?>
         </div>
 
         <h1 class="fiche__titre"><?= e($oeuvre['titre']) ?></h1>
@@ -103,7 +125,7 @@ require __DIR__ . '/templates/header.php';
         <dl class="fiche__details">
             <div class="fiche__detail">
                 <dt class="fiche__detail-label">Progression</dt>
-                <dd class="fiche__detail-valeur">Chapitre <?= (int) $oeuvre['chapitre_actuel'] ?><?= $oeuvre['chapitres_total'] ? ' / ' . (int) $oeuvre['chapitres_total'] : '' ?></dd>
+                <dd class="fiche__detail-valeur"><?= e(progression($oeuvre)) ?></dd>
             </div>
             <?php if ($oeuvre['statut_publication']): ?>
                 <div class="fiche__detail">
@@ -180,8 +202,13 @@ require __DIR__ . '/templates/header.php';
                 </select>
             </div>
             <div class="formulaire__groupe">
-                <label class="formulaire__label" for="chapitre_actuel">Chapitre actuel</label>
-                <input class="formulaire__champ" type="number" min="0" id="chapitre_actuel" name="chapitre_actuel" value="<?= (int) $oeuvre['chapitre_actuel'] ?>">
+                <?php if ($oeuvre['physique']): ?>
+                    <label class="formulaire__label" for="volume_actuel">Volume actuel</label>
+                    <input class="formulaire__champ" type="number" min="0" id="volume_actuel" name="volume_actuel" value="<?= (int) $oeuvre['volume_actuel'] ?>">
+                <?php else: ?>
+                    <label class="formulaire__label" for="chapitre_actuel">Chapitre actuel</label>
+                    <input class="formulaire__champ" type="number" min="0" id="chapitre_actuel" name="chapitre_actuel" value="<?= (int) $oeuvre['chapitre_actuel'] ?>">
+                <?php endif; ?>
             </div>
         </div>
 
